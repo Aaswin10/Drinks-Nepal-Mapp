@@ -23,6 +23,11 @@ import ProductTag from './ProductTag';
 import InCartButton from './InCartButton';
 import DiscountTag from './DiscountTag';
 import ProductItem from './ProductItem';
+import OptimizedImage from './OptimizedImage';
+import ResponsiveProductItem from './ResponsiveProductItem';
+import OptimizedFlatList from './OptimizedFlatList';
+import OptimizedProductList from './OptimizedProductList';
+import ResponsiveHeader from './ResponsiveHeader';
 
 
 const components = {
@@ -51,6 +56,11 @@ const components = {
   ProductTag,
   InCartButton,
   ProductItem,
+  OptimizedImage,
+  ResponsiveProductItem,
+  OptimizedFlatList,
+  OptimizedProductList,
+  ResponsiveHeader,
 };
 
 export { components };
