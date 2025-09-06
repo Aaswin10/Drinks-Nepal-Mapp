@@ -491,3 +491,6 @@ const createStyles = (getScaledSize, getResponsiveValue, screenWidth) => StyleSh
     fontSize: getScaledSize(16),
   },
 });
+
+
+export default createStyles
