@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851033649872",
+    "project_id": "drinksnepal-d29e5",
+    "storage_bucket": "drinksnepal-d29e5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851033649872:android:c7c9a4ae2c2f1f735ca4d5",
+        "android_client_info": {
+          "package_name": "com.drinks.nepal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoXwKr5EGtKtapU2m3XZcafNgHXW2Xpbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

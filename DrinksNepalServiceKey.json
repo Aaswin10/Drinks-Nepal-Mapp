@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "drinksnepal-d29e5",
+  "private_key_id": "9f99bdd7bd1cfef5ed96f7f1d174bd38936dea21",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC67jB2PYWYSid/\n4A+DOtZTRk1hFV7yfg+xd8Gz+ZoY+vjYVRIhXhse7ePEmNZ/PIwcTJFsXu7pIQP5\ne/GgngRuJDeYqSEXS0L6qSuCPv26Frd7NM8SitpTVIb3bjUSg/nPlQdBYsw4xNl3\n4zlAjK5qNA/XwilEw+P/I2xf+cK41x+WNutKgSvehTXcnHkUom2L2x8efjG/jBHN\nzky7HRCAAzlBL8ybRWj/RrDcWoYaGbtUuYNHGW223xYIy31kjm2ho7Zx/E6nLvII\nt668UCXUuR8yhB8ZuhithN3pvpHOgrrUvsHYklcb3ixaWwAa86KHcPF0x5bWvtwU\nMd4+RYIpAgMBAAECggEAEKqojP5OwUWJUIw2bd2q2tlnkEqiwM2vEgRqs6SDUgtc\ncRNirrFwixksR+zVoRoRpvtHswki1YvhShb8M/Uq0XQutdCMmAJYmjdHnxEFN9iL\nKvPKK63QKgJdF0YO+tPkC9dOgoyvxzb76cXLZr80VNlH+VWBLvWlSCwNH2CKNUcn\nvno+fAeIfLgXIGdMPQUlTRzgzm0ntLtmgtL3JTUaNicwh4mk2uH9t1GvMXV4MSwV\nCDnCwyTWZOePsIYB5D4/cM9gaMuy06FkgB3rXPWYARW9KaxoCqCmU1hjCOdb6LBQ\nZN07B0FV3aYShKRPfZdNqYp36ic29rkxtBg3iPnpgQKBgQDyMw5P/XVSWDBMZ5Wo\n5a1vERICZTnMPIpj87SAMfEUsWk/X+LMX6S/vol6EAmTWJkYbpeF+Oo6fNxKHboK\n2jitD7HYUec2tJFqfzFq87JOIz/dw+I7zeWFzd4+j2alli/QqepJmnUI7dlq4/s/\nY+iQY9RmwSAu7kNuUFNk4f8FaQKBgQDFlO2/d1LHhKnYxroX8XkXv1TUa/xgQmQq\nxRVXrwZaczRhe9OMxzeIIQNgkNtzbFqyordi5ZpDG8h6zEsHshk4DT+iSyTkoV5n\nFWgDlWczWXfXwJmkVoXboiQ8CsEIumPBqr4LBZfOqCrBMK2IqbCZuxJ4/ygsRdZD\nfE6PNrs+wQKBgAY4P27YcHHb5+meY16B/3ExvAept9FB4L/uWz1LiwhgAfbprHZZ\nIm72Iquqy8Qn606QUH3VRZaY7ENO/h8XOYtgMs3+VHS4MF/OwmMfvP16tEIqrJ2i\njPlhrwpmPlmUQMgYBPc86zJ+gS3YivQ2yZsjpSm6Xew2nC6yC2I014q5AoGBAJyg\n6Cv9Oqkh2McZGtL6QOV7bpMKm8HvP5rMK5QcEqxHYYHZ+KVEFBidGyFFFEKW5ftw\nlHIY08ZZUv9Nzjjmjalqj0Rnz3JTHhQX2yHkITCKvz9Q1jt5v5mSGqliWQ5DO+t+\nIDN6lpJjq6kEnryU0IO90fILS9x07FsJQvmzCJLBAoGBAIzTNKNWkBg3dQAlnNQM\nIWuLTLj0q9hp1R72K+DKvEQj8tvxfEtIwKqLiGnk8ko6zGqAdLCFJFnp6XOHM48+\n0ySgc/eiCscGv5JqG8qJ3XE8Cmkf6mR2TEuM2QA8JfsB+LColGqE3Hqw77gzFVC6\nsI11AXxi7MQswp2drtuRktVd\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-a6gxt@drinksnepal-d29e5.iam.gserviceaccount.com",
+  "client_id": "100734774580047503964",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-a6gxt%40drinksnepal-d29e5.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
