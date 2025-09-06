@@ -77,6 +77,11 @@ const VerifyYourPhoneNumber = ({ route }) => {
   }, [isPending]);
 
   const handleContinue = async () => {
+    if (!phoneNumber || phoneNumber.length < 10) {
+      Alert.alert('Error', 'Please enter a valid phone number');
+      return;
+    }
+
     try {
       generateOtpMutation(
         { phoneNumber },
@@ -85,17 +90,19 @@ const VerifyYourPhoneNumber = ({ route }) => {
             if (data.data === true) {
               navigation.navigate('ConfirmationCode', { phoneNumber });
             } else {
-              Alert.alert('Error', 'Error generating OTP');
+              Alert.alert('Error', 'Failed to send OTP. Please try again.');
             }
           },
           onError: (error) => {
             console.log('Error generating OTP:', JSON.stringify(error));
-            Alert.alert('Error', 'Error generating OTP');
+            const errorMessage = error?.response?.data?.message || 'Failed to send OTP. Please check your phone number and try again.';
+            Alert.alert('Error', errorMessage);
           },
         },
       );
     } catch (error) {
       console.error('Error in handleContinue:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
       dispatch(setLoading(false));
     }
   };

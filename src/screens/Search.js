@@ -98,26 +98,26 @@ const Search = () => {
   );
 
   const renderProductSection = (title, data, isLoading, searchType, horizontal = true) => (
-    <View className="px-5 flex flex-col gap-5 py-6">
+    <View style={styles.sectionContainer}>
       <components.ProductCategory
         title={title}
-        containerStyle={{ marginHorizontal: 20 }}
+        containerStyle={styles.sectionHeader}
         onPress={() => navigation.navigate('CategoryShop', { title, searchType })}
       />
       {isLoading ? (
-        <ActivityIndicator />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.COLORS.lightBlue1} />
+        </View>
       ) : (
-        <FlatList
+        <components.OptimizedFlatList
           data={data?.data?.products}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <components.ProductItem width={horizontal ? 220 : undefined} item={item} />
-          )}
+          renderItem={({ item }) => <components.ResponsiveProductItem item={item} />}
           horizontal={horizontal}
           showsHorizontalScrollIndicator={false}
           numColumns={horizontal ? undefined : 2}
           scrollEnabled={horizontal}
-          contentContainerStyle={{ padding: 10 }}
+          contentContainerStyle={styles.listContent}
         />
       )}
     </View>
@@ -127,7 +127,7 @@ const Search = () => {
     <>
       {renderHeader()}
       {renderCategories()}
-      {renderProductSection('All Products', allProducts, isLoadingAllProducts, 'text', false)}
+      {renderProductSection('Featured Products', allProducts, isLoadingAllProducts, 'text', false)}
     </>
   );
 
@@ -140,13 +140,13 @@ const Search = () => {
   );
 
   return (
-    <View style={{ flex: 1 }}>
-      <FlatList
+    <View style={styles.container}>
+      <components.OptimizedFlatList
         data={[]} // Empty data array since we're using header/footer for content
         renderItem={null}
         ListHeaderComponent={ListHeaderComponent}
         ListFooterComponent={ListFooterComponent}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={styles.mainContent}
         showsVerticalScrollIndicator={false}
       />
 
@@ -154,5 +154,30 @@ const Search = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.COLORS.white,
+  },
+  mainContent: {
+    paddingBottom: 20,
+  },
+  sectionContainer: {
+    paddingVertical: 20,
+    backgroundColor: theme.COLORS.white,
+    marginBottom: 12,
+  },
+  sectionHeader: {
+    marginHorizontal: 20,
+  },
+  loadingContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  listContent: {
+    padding: 10,
+  },
+});
 
 export default Search;

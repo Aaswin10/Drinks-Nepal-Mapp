@@ -436,11 +436,11 @@ const CategoryShop = () => {
   );
 
   const renderProducts = () => (
-    <FlatList
+    <components.OptimizedFlatList
       data={processedProducts}
       keyExtractor={(item) => item._id}
       renderItem={({ item }) => {
-        return <components.ProductItem item={item} />;
+        return <components.ResponsiveProductItem item={item} />;
       }}
       numColumns={2}
       initialNumToRender={10}
@@ -449,7 +449,9 @@ const CategoryShop = () => {
       contentContainerStyle={[styles.productListContainer]}
       onEndReached={() => !isFetchingNextPage && fetchNextPage()}
       ListEmptyComponent={
-        <Text style={{}}>No products found within the selected price range.</Text>
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>No products found within the selected price range.</Text>
+        </View>
       }
     />
   );
@@ -580,6 +582,18 @@ const styles = StyleSheet.create({
   },
   productListContainer: {
     padding: 10,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: theme.COLORS.gray1,
+    textAlign: 'center',
+    ...theme.FONTS.Mulish_400Regular,
   },
   searchContainer: {
     flexDirection: 'row',

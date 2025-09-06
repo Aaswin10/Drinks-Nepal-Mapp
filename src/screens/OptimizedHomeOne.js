@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import {
   ActivityIndicator,
-  Dimensions,
   FlatList,
   Image,
   Modal,
@@ -18,16 +17,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useBannerImageUrl, useHomeCategories, useTrendingProducts } from '../../queries/products';
 import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
-import { selectUser, selectUserLocation, selectCartLoading } from '../store/selectors';
-import { theme, responsiveTheme } from '../constants';
+import { selectUser, selectUserLocation } from '../store/selectors';
+import { theme } from '../constants';
 import { setLoading } from '../store/cartSlice';
 import { loadUserLocationFromStorage, setUserLocationWithStorage } from '../store/userSlice';
-import ResponsiveHeader from '../components/ResponsiveHeader';
-import OptimizedProductList from '../components/OptimizedProductList';
-import OptimizedImage from '../components/OptimizedImage';
+import { components } from '../components';
 import SearchList from './SearchList';
 
-const OptimizedHomeOne = () => {
+const HomeOne = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { getScaledSize, getResponsiveValue, width } = useResponsiveDimensions();
@@ -123,7 +120,7 @@ const OptimizedHomeOne = () => {
     
     return (
       <TouchableOpacity activeOpacity={0.9} style={styles.bannerTouchable}>
-        <OptimizedImage
+        <components.OptimizedImage
           uri={imageUrl}
           containerStyle={styles.bannerContainer}
           style={styles.bannerImage}
@@ -148,7 +145,7 @@ const OptimizedHomeOne = () => {
         })
       }
     >
-      <OptimizedImage
+      <components.OptimizedImage
         uri={`${API_URL}${item?.imageUrl}`}
         containerStyle={styles.categoryImageContainer}
         style={styles.categoryImage}
@@ -182,7 +179,7 @@ const OptimizedHomeOne = () => {
 
     return (
       <View style={styles.bannerWrapper}>
-        <OptimizedFlatList
+        <components.OptimizedFlatList
           ref={flatListRef}
           data={banners}
           renderItem={renderBannerItem}
@@ -221,21 +218,17 @@ const OptimizedHomeOne = () => {
 
   const renderCategories = useMemo(() => (
     <View style={styles.sectionContainer}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>C A T E G O R I E S</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('CategoryShop', {
-              title: 'Categories',
-              searchType: 'category',
-            })
-          }
-          style={styles.viewAllButton}
-        >
-          <Text style={styles.viewAllText}>View All</Text>
-        </TouchableOpacity>
-      </View>
-      <OptimizedFlatList
+      <components.ProductCategory
+        title="C A T E G O R I E S"
+        containerStyle={styles.sectionHeaderStyle}
+        onPress={() =>
+          navigation.navigate('CategoryShop', {
+            title: 'Categories',
+            searchType: 'category',
+          })
+        }
+      />
+      <components.OptimizedFlatList
         data={categories?.data}
         renderItem={renderCategoryItem}
         keyExtractor={(item) => item?._id?.toString()}
@@ -248,21 +241,17 @@ const OptimizedHomeOne = () => {
 
   const renderSpecials = useMemo(() => (
     <View style={styles.sectionContainer}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Drinks Nepal Special</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('CategoryShop', {
-              title: 'Specials',
-              searchType: 'trending',
-            })
-          }
-          style={styles.viewAllButton}
-        >
-          <Text style={styles.viewAllText}>View All</Text>
-        </TouchableOpacity>
-      </View>
-      <OptimizedProductList
+      <components.ProductCategory
+        title="Drinks Nepal Special"
+        containerStyle={styles.sectionHeaderStyle}
+        onPress={() =>
+          navigation.navigate('CategoryShop', {
+            title: 'Specials',
+            searchType: 'trending',
+          })
+        }
+      />
+      <components.OptimizedProductList
         data={searchResults?.data?.products}
         loading={isProductsLoading}
         numColumns={2}
@@ -309,7 +298,7 @@ const OptimizedHomeOne = () => {
   }, [isNewUser, isLocationModalVisible, handleLocationSelect, styles]);
 
   const renderHeader = useCallback(() => (
-    <ResponsiveHeader
+    <components.ResponsiveHeader
       logo={true}
       search={true}
       onSearchPress={handleSearchPress}
@@ -343,7 +332,7 @@ const OptimizedHomeOne = () => {
     <View style={styles.container}>
       {renderHeader()}
       {renderLocationModal}
-      <OptimizedFlatList
+      <components.OptimizedFlatList
         data={listData}
         renderItem={renderListItem}
         keyExtractor={(item) => item.id}
@@ -418,26 +407,9 @@ const createStyles = (getScaledSize, getResponsiveValue, screenWidth) => StyleSh
     backgroundColor: theme.COLORS.white,
     marginBottom: getScaledSize(12),
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  sectionHeaderStyle: {
     marginHorizontal: getScaledSize(20),
     marginBottom: getScaledSize(16),
-  },
-  sectionTitle: {
-    ...theme.FONTS.H4,
-    color: theme.COLORS.black,
-    fontSize: getScaledSize(18),
-  },
-  viewAllButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  viewAllText: {
-    ...theme.FONTS.Mulish_600SemiBold,
-    fontSize: getScaledSize(14),
-    color: theme.COLORS.lightBlue1,
   },
   categoriesContainer: {
     paddingHorizontal: getScaledSize(10),
@@ -476,7 +448,8 @@ const createStyles = (getScaledSize, getResponsiveValue, screenWidth) => StyleSh
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    width: getResponsiveValue('80%', '60%'),
+    width: '80%',
+    maxWidth: getScaledSize(400),
     backgroundColor: 'white',
     borderRadius: getScaledSize(20),
     padding: getScaledSize(20),
@@ -518,5 +491,3 @@ const createStyles = (getScaledSize, getResponsiveValue, screenWidth) => StyleSh
     fontSize: getScaledSize(16),
   },
 });
-
-export default OptimizedHomeOne;

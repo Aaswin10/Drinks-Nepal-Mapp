@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { ActivityIndicator, Alert, Platform, View, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useQueryClient } from '@tanstack/react-query';
-import { useNavigation } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthenticateMutation, useUpdatePushTokenMutation } from '../../queries/authentication';
 import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
@@ -200,7 +200,7 @@ const OptimizedStackNavigator = () => {
           if (notificationData?.title !== 'New Order Assigned') {
             dispatch(updateUserNotification(notificationData));
           } else {
-            Alert.alert('Order assigned');
+            Alert.alert('New Order', 'A new order has been assigned to you');
             queryClient.invalidateQueries({ queryKey: ['ordersForDeliveryGuy'] });
           }
         }

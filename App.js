@@ -2,16 +2,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import * as Notifications from 'expo-notifications';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import FlashMessage from 'react-native-flash-message';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ActivityIndicator, View } from 'react-native';
 import { requestLocationPermission } from './src/utils/locationUtils';
 import InternetModal from './src/components/InternetModal';
+import ErrorBoundary from './src/components/ErrorBoundary';
 import NetInfo from '@react-native-community/netinfo';
 import { setConnectivity } from './src/store/connectivitySlice';
 import { useDispatch, Provider } from 'react-redux';
 import store from './src/store/store';
-import StackNavigator from './src/navigation/StackNavigator';
+import OptimizedStackNavigator from './src/navigation/OptimizedStackNavigator';
+import { theme } from './src/constants';
 
 import {
   Lato_100Thin,
@@ -46,6 +49,7 @@ Notifications.setNotificationHandler({
 
 function AppContent() {
   const dispatch = useDispatch();
+  const [appReady, setAppReady] = useState(false);
   const [fontsLoaded] = useFonts({
     Lato_100Thin,
     Lato_100Thin_Italic,
@@ -59,12 +63,6 @@ function AppContent() {
     Lato_900Black_Italic,
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      // await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
   useEffect(() => {
     requestLocationPermission();
   }, []);
@@ -76,13 +74,33 @@ function AppContent() {
     return () => unsubscribe();
   }, [dispatch]);
 
-  if (!fontsLoaded) return null;
+  useEffect(() => {
+    if (fontsLoaded) {
+      // Small delay to ensure everything is ready
+      setTimeout(() => setAppReady(true), 100);
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded || !appReady) {
+    return (
+      <View style={{ 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: theme.COLORS.white 
+      }}>
+        <ActivityIndicator size="large" color={theme.COLORS.lightBlue1} />
+      </View>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer independent={true}>
-        <SafeAreaProvider onLayout={onLayoutRootView}>
-          <StackNavigator />
+        <SafeAreaProvider>
+          <ErrorBoundary>
+            <OptimizedStackNavigator />
+          </ErrorBoundary>
           <InternetModal />
         </SafeAreaProvider>
         <FlashMessage position="top" statusBarHeight={20} floating={true} />
@@ -93,8 +111,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <AppContent />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <AppContent />
+      </Provider>
+    </ErrorBoundary>
   );
 }

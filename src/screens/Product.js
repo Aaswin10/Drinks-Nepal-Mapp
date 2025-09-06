@@ -7,10 +7,13 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../store/cartSlice';
+import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
+import { selectCartItemCount } from '../store/selectors';
 
 import { useRecommendedProducts } from '../../queries/products';
 import { components } from '../components';
@@ -21,6 +24,7 @@ const Product = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { product } = route.params;
+  const { getScaledSize } = useResponsiveDimensions();
 
   const userId = useSelector((state) => state.user?.user?._id);
   const dispatch = useDispatch();
@@ -35,6 +39,7 @@ const Product = () => {
   );
 
   const productList = useSelector((state) => state.cart.list);
+  const styles = React.useMemo(() => createStyles(getScaledSize), [getScaledSize]);
 
   const itemQuantity = () => {
     const cartItem = productList.find((i) => i._id === product._id);
@@ -52,27 +57,28 @@ const Product = () => {
 
   const updateCurrentSlideIndex = (e) => {
     const contentOffsetX = e.nativeEvent.contentOffset.x;
-    const currentIndex = Math.round(contentOffsetX / theme.SIZES.width);
+    const currentIndex = Math.round(contentOffsetX / styles.carouselWidth);
     setCurrentSlideIndex(currentIndex);
   };
 
   const renderHeader = () => {
-    return <components.Header goBack={true} bag={true} displayScreenName={true} cart={true} />;
+    return <components.ResponsiveHeader goBack={true} cart={true} displayScreenName={true} />;
   };
 
   const renderRecommened = () => (
-    <View style={{ paddingVertical: 20, backgroundColor: theme.COLORS.white }} className="my-3">
-      <components.ProductCategory title="Recommended" containerStyle={{ marginHorizontal: 20 }} />
+    <View style={styles.recommendedSection}>
+      <components.ProductCategory 
+        title="Recommended" 
+        containerStyle={styles.sectionHeader} 
+      />
       {isLoading ? (
-        <ActivityIndicator />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={theme.COLORS.lightBlue1} />
+        </View>
       ) : (
-        <FlatList
+        <components.OptimizedProductList
           data={recommendedProducts?.data?.products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <components.ProductItem item={item} />}
           numColumns={2}
-          scrollEnabled={false}
-          contentContainerStyle={{ padding: 10 }}
         />
       )}
     </View>
@@ -80,7 +86,7 @@ const Product = () => {
 
   const renderCarousel = () => {
     return (
-      <View style={{ backgroundColor: theme.COLORS.white }} className="pb-3">
+      <View style={styles.carouselContainer}>
         <ScrollView
           horizontal={true}
           pagingEnabled={true}
@@ -90,52 +96,32 @@ const Product = () => {
           {Array.isArray(product.images) ? (
             product.images.map((item, index) => {
               return (
-                <components.ImageItem
+                <components.OptimizedImage
                   item={{ ...product, images: [item] }}
+                  uri={item}
                   key={index}
-                  containerStyle={{
-                    width: theme.SIZES.width,
-                    height: 350,
-                    backgroundColor: theme.COLORS.white,
-                  }}
+                  containerStyle={styles.carouselItem}
                   resizeMode="contain"
                 />
               );
             })
           ) : (
-            <components.ImageItem
-              item={product.images}
-              containerStyle={{
-                width: theme.SIZES.width,
-                height: 350,
-                backgroundColor: theme.COLORS.white,
-              }}
+            <components.OptimizedImage
+              uri={product.images}
+              containerStyle={styles.carouselItem}
               resizeMode="contain"
             />
           )}
         </ScrollView>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-          }}
-        >
+        <View style={styles.pagination}>
           {Array.isArray(product.images) &&
             product.images.map((_, index) => (
               <View
                 key={index}
-                style={{
-                  width: currentSlideIndex === index ? 15 : 8,
-                  height: 8,
-                  marginHorizontal: 5,
-                  borderRadius: 50,
-                  borderWidth: 2,
-                  borderColor: theme.COLORS.lightBlue1,
-                  marginTop: 20,
-                  backgroundColor:
-                    currentSlideIndex === index ? theme.COLORS.white : theme.COLORS.lightBlue1,
-                }}
+                style={[
+                  styles.paginationDot,
+                  currentSlideIndex === index && styles.paginationDotActive,
+                ]}
               />
             ))}
         </View>
@@ -395,10 +381,7 @@ const Product = () => {
   const renderContent = () => {
     return (
       <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          backgroundColor: theme.COLORS.lightGray1,
-        }}
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {renderCarousel()}
@@ -409,11 +392,63 @@ const Product = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.lightGray1 }}>
+    <SafeAreaView style={styles.container}>
       {renderHeader()}
       {renderContent()}
     </SafeAreaView>
   );
 };
+
+const createStyles = (getScaledSize) => StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: theme.COLORS.lightGray1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    backgroundColor: theme.COLORS.lightGray1,
+  },
+  carouselContainer: {
+    backgroundColor: theme.COLORS.white,
+    paddingBottom: getScaledSize(12),
+  },
+  carouselItem: {
+    width: theme.SIZES.width,
+    height: getScaledSize(350),
+    backgroundColor: theme.COLORS.white,
+  },
+  carouselWidth: theme.SIZES.width,
+  pagination: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginTop: getScaledSize(20),
+  },
+  paginationDot: {
+    width: getScaledSize(8),
+    height: getScaledSize(8),
+    marginHorizontal: getScaledSize(5),
+    borderRadius: getScaledSize(4),
+    borderWidth: 2,
+    borderColor: theme.COLORS.lightBlue1,
+    backgroundColor: theme.COLORS.lightBlue1,
+  },
+  paginationDotActive: {
+    width: getScaledSize(15),
+    backgroundColor: theme.COLORS.white,
+  },
+  recommendedSection: {
+    paddingVertical: getScaledSize(20),
+    backgroundColor: theme.COLORS.white,
+    marginVertical: getScaledSize(12),
+  },
+  sectionHeader: {
+    marginHorizontal: getScaledSize(20),
+  },
+  loadingContainer: {
+    padding: getScaledSize(20),
+    alignItems: 'center',
+  },
+});
 
 export default Product;

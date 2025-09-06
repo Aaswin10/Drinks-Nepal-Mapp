@@ -64,6 +64,11 @@ const ConfirmationCode = ({ route }) => {
 
   const handleContinue = async () => {
     try {
+      if (finalOtp.length !== 5) {
+        Alert.alert('Error', 'Please enter the complete OTP');
+        return;
+      }
+
       verifyOtpMutation(
         { phoneNumber, otp: finalOtp },
         {
@@ -92,13 +97,15 @@ const ConfirmationCode = ({ route }) => {
             }
           },
           onError: (error) => {
-            console.log('Error verifyting OTP:', JSON.stringify(error));
-            Alert.alert('Error', 'OTP verification failed');
+            console.log('Error verifying OTP:', JSON.stringify(error));
+            const errorMessage = error?.response?.data?.message || 'OTP verification failed. Please try again.';
+            Alert.alert('Error', errorMessage);
           },
         },
       );
     } catch (error) {
       console.error('Error in handleContinue:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
       dispatch(setLoading(false));
     }
   };

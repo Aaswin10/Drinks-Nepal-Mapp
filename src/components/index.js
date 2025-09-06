@@ -28,6 +28,8 @@ import ResponsiveProductItem from './ResponsiveProductItem';
 import OptimizedFlatList from './OptimizedFlatList';
 import OptimizedProductList from './OptimizedProductList';
 import ResponsiveHeader from './ResponsiveHeader';
+import LoadingSpinner from './LoadingSpinner';
+import ErrorBoundary from './ErrorBoundary';
 
 
 const components = {
@@ -61,6 +63,8 @@ const components = {
   OptimizedFlatList,
   OptimizedProductList,
   ResponsiveHeader,
+  LoadingSpinner,
+  ErrorBoundary,
 };
 
 export { components };

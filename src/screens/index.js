@@ -12,6 +12,7 @@ import EditProfile from './EditProfile';
 import ForgotPassword from './ForgotPassword';
 import ForgotPasswordSentEmail from './ForgotPasswordSentEmail';
 import HomeOne from './HomeOne';
+import OptimizedHomeOne from './OptimizedHomeOne';
 import LeaveAReviews from './LeaveAReviews';
 import MyAddress from './MyAddress';
 import MyPromocodes from './MyPromocodes';
@@ -37,7 +38,7 @@ import TrackYourOrder from './TrackYourOrder';
 import VerifyYourPhoneNumber from './VerifyYourPhoneNumber';
 import Wishlist from './Wishlist';
 const screens = {
-  HomeOne,
+  HomeOne: OptimizedHomeOne,
   Profile,
   Order,
   OrderFailed,
