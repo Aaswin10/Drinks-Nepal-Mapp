@@ -241,38 +241,37 @@ const OptimizedStackNavigator = () => {
         screenOptions={screenOptions}
       >
         <Stack.Screen name="Product" component={screens.Product} />
-        <Stack.Screen name="Shop" component={screens.Shop} />
         <Stack.Screen name="CategoryShop" component={screens.CategoryShop} />
         <Stack.Screen name="Reviews" component={screens.Reviews} />
-        <Stack.Screen name="EditProfile" component={screens.EditProfile} />
-        <Stack.Screen name="Onboarding" component={screens.Onboarding} />
         <Stack.Screen name="OrderHistory" component={screens.OrderHistory} />
         <Stack.Screen name="OrderDetails" component={screens.OrderDetails} />
         <Stack.Screen name="TrackYourOrder" component={screens.TrackYourOrder} />
         <Stack.Screen name="OrderSuccessful" component={screens.OrderSuccessful} />
         <Stack.Screen name="OrderFailed" component={screens.OrderFailed} />
         <Stack.Screen name="LeaveAReviews" component={screens.LeaveAReviews} />
-        <Stack.Screen name="ConfirmationCode" component={screens.ConfirmationCode} />
-        <Stack.Screen name="SignIn" component={screens.SignIn} />
-        <Stack.Screen name="SignUp" component={screens.SignUp} />
-        <Stack.Screen name="ForgotPassword" component={screens.ForgotPassword} />
-        <Stack.Screen name="MyPromocodes" component={screens.MyPromocodes} />
-        <Stack.Screen name="VerifyYourPhoneNumber" component={screens.VerifyYourPhoneNumber} />
-        <Stack.Screen name="AccountCreated" component={screens.AccountCreated} />
         <Stack.Screen name="Checkout" component={screens.Checkout} />
         <Stack.Screen name="PaymentMethod" component={screens.PaymentMethod} />
-        <Stack.Screen name="NewPassword" component={screens.NewPassword} />
-        <Stack.Screen name="ForgotPasswordSentEmail" component={screens.ForgotPasswordSentEmail} />
-        <Stack.Screen name="AddANewCard" component={screens.AddANewCard} />
         <Stack.Screen name="MyAddress" component={screens.MyAddress} />
         <Stack.Screen name="AddANewAddress" component={screens.AddANewAddress} />
         <Stack.Screen name="ShippingDetails" component={screens.CheckoutShippingDetails} />
+        <Stack.Screen name="EditProfile" component={screens.EditProfile} />
+        <Stack.Screen name="MyPromocodes" component={screens.MyPromocodes} />
         <Stack.Screen name="AboutUs" component={screens.AboutUs} />
         <Stack.Screen name="PrivacyPolicy" component={screens.PrivacyPolicy} />
         <Stack.Screen name="TermsOfService" component={screens.TermsOfService} />
-        <Stack.Screen name="DOrderDetails" component={screens.DOrderDetails} />
+        <Stack.Screen name="Wishlist" component={screens.Wishlist} />
+        
+        {/* Authentication Screens */}
+        <Stack.Screen name="Onboarding" component={screens.Onboarding} />
+        <Stack.Screen name="VerifyYourPhoneNumber" component={screens.VerifyYourPhoneNumber} />
+        <Stack.Screen name="ConfirmationCode" component={screens.ConfirmationCode} />
+        <Stack.Screen name="SignUp" component={screens.SignUp} />
+        <Stack.Screen name="AccountCreated" component={screens.AccountCreated} />
+        
+        {/* Layout Screens */}
         <Stack.Screen name="MainLayout" component={MainLayout} />
         <Stack.Screen name="DeliveryLayout" component={DeliveryLayout} />
+        <Stack.Screen name="DOrderDetails" component={screens.DOrderDetails} />
         <Stack.Screen name="Notification" component={screens.Notification} />
       </Stack.Navigator>
 

@@ -68,9 +68,14 @@ const TrackYourOrder = () => {
 
   useEffect(() => {
     // Connect to socket server
-    const socket = io(
-      Platform.OS === 'android' ? process.env.APP_SOCKET_URL_ANDROID : process.env.APP_SOCKET_URL,
-    );
+    const socketUrl = Platform.OS === 'android' ? process.env.APP_SOCKET_URL_ANDROID : process.env.APP_SOCKET_URL;
+    
+    if (!socketUrl) {
+      console.warn('Socket URL not configured');
+      return;
+    }
+    
+    const socket = io(socketUrl);
 
     // Listen for location updates for this specific order
     socket.on(`order_location_${order._id}`, (location) => {
@@ -82,7 +87,9 @@ const TrackYourOrder = () => {
 
     // Clean up socket connection on unmount
     return () => {
-      socket.disconnect();
+      if (socket) {
+        socket.disconnect();
+      }
     };
   }, [order._id, currentZoom]);
 

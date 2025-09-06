@@ -37,3 +37,24 @@ export const formatPhoneNumber = (phoneNumber) => {
   // Format as needed (e.g., add country code)
   return cleanNumber;
 };
+
+export const validateRequired = (value, fieldName) => {
+  if (!value || value.toString().trim() === '') {
+    return `${fieldName} is required`;
+  }
+  return null;
+};
+
+export const validateMinLength = (value, minLength, fieldName) => {
+  if (value && value.length < minLength) {
+    return `${fieldName} must be at least ${minLength} characters`;
+  }
+  return null;
+};
+
+export const validateMaxLength = (value, maxLength, fieldName) => {
+  if (value && value.length > maxLength) {
+    return `${fieldName} must be less than ${maxLength} characters`;
+  }
+  return null;
+};

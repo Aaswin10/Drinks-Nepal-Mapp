@@ -4,12 +4,8 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMarkNotificationAsReadMutation } from '../../queries/authentication';
-import { theme } from '../constants';
-import { setLoading } from '../store/cartSlice';
-import { resetUserNotificationUnReadCount } from '../store/userSlice';
-import { svg } from '../svg';
-import ContactCategory from './ContactCategory';
-import LocationSelector from './LocationSelector';
+import { selectNotificationCount } from '../store/selectors';
+import { setScreen } from '../store/tabSlice';
 import { setScreen } from '../store/tabSlice';
 
 const Header = ({
@@ -31,7 +27,7 @@ const Header = ({
   const route = useRoute();
   const screenName = name || route.name;
   const dispatch = useDispatch();
-  const { unreadCount = 0 } = useSelector((state) => state.user?.user?.notification || {});
+  const unreadCount = useSelector(selectNotificationCount);
   const { _id = null } = useSelector((state) => state.user?.user || {});
   const { mutate: markNotificationAsRead, isPending } = useMarkNotificationAsReadMutation();
   const cartItems = useSelector((state) => state.cart?.list || []);

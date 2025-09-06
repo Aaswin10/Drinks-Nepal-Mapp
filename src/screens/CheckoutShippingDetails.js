@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import { selectUserAddresses } from '../store/selectors';
 import { components } from '../components';
 import { theme } from '../constants';
 
@@ -17,9 +18,7 @@ const CheckoutShippingDetails = () => {
 
   const navigation = useNavigation();
 
-  const {
-    user: { addresses },
-  } = useSelector((state) => state.user);
+  const addresses = useSelector(selectUserAddresses);
   const [selectedAddress, setSelectedAddress] = useState(
     addresses.length > 0 ? addresses[0]._id : null,
   );

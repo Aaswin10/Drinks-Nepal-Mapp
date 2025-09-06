@@ -13,8 +13,11 @@ const OptimizedImage = memo(({
   showLoader = true,
   loaderSize = 'small',
   loaderColor = theme.COLORS.lightGray,
+  item, // Legacy support
 }) => {
-  const { loading, error, source } = useOptimizedImage(uri, fallbackUri);
+  // Handle legacy item prop
+  const imageUri = uri || (item?.images?.[0]) || (typeof item?.images === 'string' ? item.images : null);
+  const { loading, error, source } = useOptimizedImage(imageUri, fallbackUri);
 
   if (error && !fallbackUri) {
     return (

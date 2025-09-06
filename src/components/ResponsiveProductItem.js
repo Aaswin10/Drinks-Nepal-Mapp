@@ -12,9 +12,9 @@ const ResponsiveProductItem = memo(({ item, width: customWidth }) => {
   const navigation = useNavigation();
   const { width: screenWidth, getResponsiveValue, getScaledSize } = useResponsiveDimensions();
   
-  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault);
+  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault) || { volume: '750ml', salePrice: 0, regularPrice: item.price || 0 };
   const defaultPrice =
-    defaultVolume?.salePrice !== 0 ? defaultVolume?.salePrice : defaultVolume?.regularPrice;
+    defaultVolume?.salePrice !== 0 ? defaultVolume?.salePrice : (defaultVolume?.regularPrice || item.price || 0);
 
   // Calculate responsive dimensions
   const itemWidth = customWidth || getResponsiveValue(

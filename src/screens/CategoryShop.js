@@ -436,23 +436,11 @@ const CategoryShop = () => {
   );
 
   const renderProducts = () => (
-    <components.OptimizedFlatList
+    <components.OptimizedProductList
       data={processedProducts}
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => {
-        return <components.ResponsiveProductItem item={item} />;
-      }}
       numColumns={2}
-      initialNumToRender={10}
-      maxToRenderPerBatch={5}
-      removeClippedSubviews={true}
-      contentContainerStyle={[styles.productListContainer]}
       onEndReached={() => !isFetchingNextPage && fetchNextPage()}
-      ListEmptyComponent={
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>No products found within the selected price range.</Text>
-        </View>
-      }
+      emptyMessage="No products found within the selected price range."
     />
   );
 

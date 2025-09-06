@@ -35,7 +35,7 @@ const Product = () => {
   });
 
   const [selectedVolume, setSelectedVolume] = useState(
-    product?.details?.volume?.find((v) => v.isDefault)?.volume || '',
+    product?.details?.volume?.find((v) => v.isDefault)?.volume || '750ml',
   );
 
   const productList = useSelector((state) => state.cart.list);
@@ -49,8 +49,8 @@ const Product = () => {
   };
 
   const getCurrentPrice = () => {
-    const volumeDetails = product?.details?.volume?.find((v) => v.volume === selectedVolume);
-    return volumeDetails?.salePrice !== 0 ? volumeDetails?.salePrice : volumeDetails?.regularPrice;
+    const volumeDetails = product?.details?.volume?.find((v) => v.volume === selectedVolume) || { salePrice: 0, regularPrice: product.price || 0 };
+    return volumeDetails?.salePrice !== 0 ? volumeDetails?.salePrice : (volumeDetails?.regularPrice || product.price || 0);
   };
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -371,7 +371,7 @@ const Product = () => {
               marginBottom: 20,
             }}
           >
-            {product.description}
+            {product.description || 'No description available.'}
           </Text>
         </View>
       </View>

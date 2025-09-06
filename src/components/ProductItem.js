@@ -12,9 +12,9 @@ import ProductTag from './ProductTag';
 const ProductItem = React.memo(({ item, width }) => {
   const navigation = useNavigation();
   const { getScaledSize } = useResponsiveDimensions();
-  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault);
+  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault) || { volume: '750ml', salePrice: 0, regularPrice: item.price || 0 };
   const defaultPrice =
-    defaultVolume?.salePrice !== 0 ? defaultVolume?.salePrice : defaultVolume?.regularPrice;
+    defaultVolume?.salePrice !== 0 ? defaultVolume?.salePrice : (defaultVolume?.regularPrice || item.price || 0);
 
   const styles = React.useMemo(() => createStyles(getScaledSize, width), [getScaledSize, width]);
 

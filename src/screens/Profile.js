@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../store/selectors';
 import { components } from '../components';
 import { setScreen } from '../store/tabSlice';
 import { setIsAuthenticated, setUser } from '../store/userSlice';
@@ -18,8 +19,9 @@ const ProfileScreen = () => {
     setShowLogoutPopup(true);
   };
 
-  const userName = useSelector((state) => state?.user?.user?.fullName);
-  const phoneNumber = useSelector((state) => state?.user?.user?.phoneNumber);
+  const user = useSelector(selectUser);
+  const userName = user?.fullName;
+  const phoneNumber = user?.phoneNumber;
 
   const confirmLogout = () => {
     console.log('User logged out');

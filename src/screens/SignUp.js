@@ -109,7 +109,12 @@ const SignUp = () => {
           containerStyle={{ marginBottom: 20 }}
           check={true}
           value={fullName}
-          onChangeText={setFullName}
+          onChangeText={(text) => {
+            setFullName(text);
+            if (nameError) setNameError('');
+          }}
+          error={nameError}
+          required={true}
         />
         <components.InputField
           title="Email"
@@ -117,7 +122,12 @@ const SignUp = () => {
           containerStyle={{ marginBottom: 20 }}
           check={true}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => {
+            setEmail(text);
+            if (emailError) setEmailError('');
+          }}
+          error={emailError}
+          required={true}
         />
         <components.Button
           title="Continue"

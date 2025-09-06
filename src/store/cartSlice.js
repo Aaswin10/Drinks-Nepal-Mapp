@@ -20,8 +20,8 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { _id, selectedVolume, details } = action.payload;
-      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume;
+      const { _id, selectedVolume, details, name, images } = action.payload;
+      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume || '750ml';
       const volumeToUse = selectedVolume || defaultVolume;
 
       const inCart = state.list.find((item) => item._id === _id);
@@ -43,8 +43,8 @@ const cartSlice = createSlice({
       } else {
         state.list.push({
           _id,
-          name: action.payload.name,
-          images: action.payload.images,
+          name: name || 'Product',
+          images: images || [],
           volume: [
             {
               volume: volumeToUse,
@@ -60,7 +60,7 @@ const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       const { _id, selectedVolume, details } = action.payload;
-      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume;
+      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume || '750ml';
       const volumeToUse = selectedVolume || defaultVolume;
 
       const inCart = state.list.find((item) => item._id === _id);

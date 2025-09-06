@@ -136,7 +136,12 @@ const VerifyYourPhoneNumber = ({ route }) => {
             containerStyle={styles.inputField}
             keyboardType={'numeric'}
             value={phoneNumber}
-            onChangeText={setPhoneNumber}
+            onChangeText={(text) => {
+              setPhoneNumber(text);
+              if (phoneError) setPhoneError('');
+            }}
+            error={phoneError}
+            required={true}
           />
         </View>
       </ScrollView>

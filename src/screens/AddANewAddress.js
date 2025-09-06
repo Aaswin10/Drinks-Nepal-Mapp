@@ -11,6 +11,7 @@ import {
   useEditAddressMutation,
   useSubmitAddressMutation,
 } from '../../queries/address';
+import { validateRequired } from '../utils/errorHandler';
 import { components } from '../components';
 import { theme } from '../constants';
 import { updateUserAddresses } from '../store/userSlice';
@@ -34,6 +35,7 @@ const AddANewAddress = ({ route }) => {
     longitude: editingAddress?.longitude || 85.3222,
   });
   const [title, setTitle] = useState(editingAddress?.addressDetails || '');
+  const [titleError, setTitleError] = useState('');
 
   const [address, setAddress] = useState(
     editingAddress ? `${editingAddress.latitude}, ${editingAddress.longitude}` : '',
@@ -187,6 +189,15 @@ const AddANewAddress = ({ route }) => {
   };
 
   const handleSubmit = () => {
+    // Validate required fields
+    const titleValidation = validateRequired(title, 'Address details');
+    if (titleValidation) {
+      setTitleError(titleValidation);
+      return;
+    }
+    
+    setTitleError('');
+    
     if (!userId) {
       Alert.alert('Error', 'User not authenticated. Please log in.');
       return;
@@ -302,7 +313,12 @@ const AddANewAddress = ({ route }) => {
           title="Address Details"
           placeholder="Address Details"
           value={title}
-          onChangeText={setTitle}
+          onChangeText={(text) => {
+            setTitle(text);
+            if (titleError) setTitleError('');
+          }}
+          error={titleError}
+          required={true}
           containerStyle={{
             marginBottom: 16,
           }}

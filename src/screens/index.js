@@ -11,8 +11,6 @@ import DOrders from './DeliveryScreens/DOrders';
 import EditProfile from './EditProfile';
 import ForgotPassword from './ForgotPassword';
 import ForgotPasswordSentEmail from './ForgotPasswordSentEmail';
-import HomeOne from './HomeOne';
-import OptimizedHomeOne from './OptimizedHomeOne';
 import LeaveAReviews from './LeaveAReviews';
 import MyAddress from './MyAddress';
 import MyPromocodes from './MyPromocodes';
@@ -37,45 +35,57 @@ import TermsOfService from './TermsOfService';
 import TrackYourOrder from './TrackYourOrder';
 import VerifyYourPhoneNumber from './VerifyYourPhoneNumber';
 import Wishlist from './Wishlist';
+
 const screens = {
-  HomeOne: OptimizedHomeOne,
-  Profile,
-  Order,
-  OrderFailed,
-  Search,
-  Wishlist,
-  Product,
-  Shop,
-  Reviews,
-  EditProfile,
+  // Core App Screens
   Onboarding,
-  OrderHistory,
-  TrackYourOrder,
-  OrderSuccessful,
-  LeaveAReviews,
-  ConfirmationCode,
-  SignIn,
-  SignUp,
   VerifyYourPhoneNumber,
+  ConfirmationCode,
+  SignUp,
   AccountCreated,
-  ForgotPassword,
-  MyPromocodes,
+  
+  // Main App Screens
+  HomeOne: Search, // Using Search as the main home with all features
+  Search,
+  Product,
+  CategoryShop,
+  Order,
+  Profile,
+  
+  // Order Management
+  OrderHistory,
+  OrderDetails,
+  OrderSuccessful,
+  OrderFailed,
+  TrackYourOrder,
+  
+  // Checkout Flow
   Checkout,
+  CheckoutShippingDetails,
   PaymentMethod,
-  NewPassword,
-  ForgotPasswordSentEmail,
-  AddANewCard,
+  
+  // Profile & Settings
+  EditProfile,
   MyAddress,
   AddANewAddress,
-  CheckoutShippingDetails,
-  OrderDetails,
+  MyPromocodes,
   AboutUs,
   PrivacyPolicy,
   TermsOfService,
+  
+  // Reviews & Feedback
+  Reviews,
+  LeaveAReviews,
+  
+  // Delivery Screens
   DOrders,
   DOrderDetails,
-  CategoryShop,
+  
+  // Notifications
   Notification,
+  
+  // Wishlist (if needed)
+  Wishlist,
 };
 
 export { screens };

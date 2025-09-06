@@ -119,6 +119,7 @@ const Order = () => {
                               dispatch(
                                 removeFromCart({
                                   ...cartItem,
+                                  details: { volume: cartItem.volume },
                                   selectedVolume: volumeItem.volume,
                                 }),
                               )
@@ -149,6 +150,7 @@ const Order = () => {
                               dispatch(
                                 addToCart({
                                   ...cartItem,
+                                  details: { volume: cartItem.volume },
                                   selectedVolume: volumeItem.volume,
                                 }),
                               )

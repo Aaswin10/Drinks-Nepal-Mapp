@@ -2,10 +2,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { memo } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
 import { selectCartItemCount, selectNotificationCount } from '../store/selectors';
 import { theme } from '../constants';
 import { svg } from '../svg';
+import { setScreen } from '../store/tabSlice';
 import LocationSelector from './LocationSelector';
 
 const ResponsiveHeader = memo(({
@@ -23,6 +25,7 @@ const ResponsiveHeader = memo(({
   setIsLocationModalVisible,
   cart,
 }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
   const { getScaledSize, getResponsiveValue } = useResponsiveDimensions();
@@ -34,10 +37,13 @@ const ResponsiveHeader = memo(({
   const styles = createStyles(getScaledSize, getResponsiveValue);
 
   const handleNotificationPress = () => {
+    // Mark notifications as read and navigate
+    // This should be implemented with the notification mutation
     navigation.navigate('Notification');
   };
 
   const handleCartPress = () => {
+    dispatch(setScreen('Cart'));
     navigation.navigate('MainLayout', { screen: 'Cart' });
   };
 

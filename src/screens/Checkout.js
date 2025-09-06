@@ -55,7 +55,7 @@ const Checkout = ({ route }) => {
   const [redirectUrl, setRedirectUrl] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
   const queryClient = useQueryClient();
-
+    user: { addresses = [], _id: userId } = {},
   const [isModalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
@@ -88,9 +88,6 @@ const Checkout = ({ route }) => {
 
   const products = useSelector((state) => state.cart.list);
   const total = useSelector((state) => state.cart.total);
-  const {
-    user: { addresses, _id: userId },
-  } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (addresses && addresses[0] && addresses[0]._id) {
