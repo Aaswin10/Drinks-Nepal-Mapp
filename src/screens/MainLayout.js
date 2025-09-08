@@ -4,8 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { setScreen } from '../store/tabSlice';
 import { useFocusEffect } from '@react-navigation/native';
-import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
-import { selectCartItemCount, selectCurrentScreen } from '../store/selectors';
 
 import { screens } from '.';
 import { theme } from '../constants';
@@ -13,11 +11,12 @@ import { svg } from '../svg';
 
 const MainLayout = () => {
   const dispatch = useDispatch();
-  const { getScaledSize } = useResponsiveDimensions();
-  const cartItemCount = useSelector(selectCartItemCount);
-  const currentScreen = useSelector(selectCurrentScreen);
+  const cartItems = useSelector((state) => state.cart.list || []);
+  const cartItemCount = cartItems.reduce((total, item) => {
+    return total + item.volume.reduce((sum, vol) => sum + vol.quantity, 0);
+  }, 0);
 
-  const styles = React.useMemo(() => createStyles(getScaledSize), [getScaledSize]);
+  const currentScreen = useSelector((state) => state.tab.screen);
 
   useFocusEffect(
     useCallback(() => {
@@ -101,14 +100,33 @@ const MainLayout = () => {
       id: '3',
       screen: 'Cart',
       icon: (
-        <View style={styles.cartIconContainer}>
+        <View style={{ position: 'relative' }}>
           <svg.BagSvg
             iconColor={currentScreen === 'Cart' ? theme.COLORS.lightBlue1 : theme.COLORS.lightGray}
             bgColor={theme.COLORS.transparent}
           />
           {cartItemCount > 0 && (
-            <View style={styles.cartBadge}>
-              <Text style={styles.badgeText}>
+            <View
+              style={{
+                position: 'absolute',
+                right: -60,
+                top: -15,
+                backgroundColor: theme.COLORS.red,
+                borderRadius: 10,
+                minWidth: 20,
+                height: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingHorizontal: 4,
+              }}
+            >
+              <Text
+                style={{
+                  color: theme.COLORS.white,
+                  fontSize: 10,
+                  fontWeight: 'bold',
+                }}
+              >
                 {cartItemCount > 9 ? '9+' : cartItemCount}
               </Text>
             </View>
@@ -143,22 +161,50 @@ const MainLayout = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.COLORS.white }}>
       {currentScreen === 'Home' && <screens.HomeOne />}
       {currentScreen === 'Explore' && <screens.Search />}
       {currentScreen === 'Cart' && <screens.Order />}
       {currentScreen === 'Order' && <screens.OrderHistory />}
       {currentScreen === 'Profile' && <screens.Profile />}
-      <View style={styles.tabBar}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          paddingVertical: 5,
+          borderTopWidth: 1,
+          borderTopColor: theme.COLORS.lightGray1,
+        }}
+      >
         {tabs.map((item, index) => {
           return item.screen === 'Cart' ? (
             <TouchableOpacity
               key={index}
               onPress={() => dispatch(setScreen(item.screen))}
-              style={[styles.cartTab, { borderColor: item?.borderColor }]}
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: theme.COLORS.lightGray1,
+                borderColor: item?.borderColor,
+                borderWidth: 0.5,
+                borderRadius: 99,
+                padding: 10,
+              }}
             >
               {item.icon}
-              <Text style={[styles.cartTabText, { color: item?.color }]}>
+              <Text
+                style={{
+                  marginLeft: 8,
+                  color: item?.color,
+                  fontSize: 16,
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  ...theme.FONTS.Mulish_600SemiBold,
+                }}
+              >
                 {item.screen}
               </Text>
             </TouchableOpacity>
@@ -166,10 +212,23 @@ const MainLayout = () => {
             <TouchableOpacity
               key={index}
               onPress={() => dispatch(setScreen(item.screen))}
-              style={styles.tab}
+              style={{
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
             >
               {item.icon}
-              <Text style={[styles.tabText, { color: item?.color }]}>
+              <Text
+                style={{
+                  marginTop: 2,
+                  color: item?.color,
+                  fontSize: 12,
+                  textAlign: 'center',
+                  ...theme.FONTS.Mulish_600SemiBold,
+                }}
+              >
                 {item.screen}
               </Text>
             </TouchableOpacity>
@@ -179,71 +238,5 @@ const MainLayout = () => {
     </SafeAreaView>
   );
 };
-
-const createStyles = (getScaledSize) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.COLORS.white,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingVertical: getScaledSize(8),
-    borderTopWidth: 1,
-    borderTopColor: theme.COLORS.lightGray1,
-    backgroundColor: theme.COLORS.white,
-  },
-  tab: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: getScaledSize(4),
-  },
-  cartTab: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.COLORS.lightGray1,
-    borderWidth: 0.5,
-    borderRadius: getScaledSize(25),
-    padding: getScaledSize(10),
-  },
-  tabText: {
-    marginTop: getScaledSize(2),
-    fontSize: getScaledSize(12),
-    textAlign: 'center',
-    ...theme.FONTS.Mulish_600SemiBold,
-  },
-  cartTabText: {
-    marginLeft: getScaledSize(8),
-    fontSize: getScaledSize(16),
-    textAlign: 'center',
-    fontWeight: 'bold',
-    ...theme.FONTS.Mulish_600SemiBold,
-  },
-  cartIconContainer: {
-    position: 'relative',
-  },
-  cartBadge: {
-    position: 'absolute',
-    right: -getScaledSize(30),
-    top: -getScaledSize(8),
-    backgroundColor: theme.COLORS.red,
-    borderRadius: getScaledSize(10),
-    minWidth: getScaledSize(20),
-    height: getScaledSize(20),
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: getScaledSize(4),
-  },
-  badgeText: {
-    color: theme.COLORS.white,
-    fontSize: getScaledSize(10),
-    fontWeight: 'bold',
-  },
-});
 
 export default MainLayout;

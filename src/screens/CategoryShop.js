@@ -436,11 +436,21 @@ const CategoryShop = () => {
   );
 
   const renderProducts = () => (
-    <components.OptimizedProductList
+    <FlatList
       data={processedProducts}
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => {
+        return <components.ProductItem item={item} />;
+      }}
       numColumns={2}
+      initialNumToRender={10}
+      maxToRenderPerBatch={5}
+      removeClippedSubviews={true}
+      contentContainerStyle={[styles.productListContainer]}
       onEndReached={() => !isFetchingNextPage && fetchNextPage()}
-      emptyMessage="No products found within the selected price range."
+      ListEmptyComponent={
+        <Text style={{}}>No products found within the selected price range.</Text>
+      }
     />
   );
 
@@ -570,18 +580,6 @@ const styles = StyleSheet.create({
   },
   productListContainer: {
     padding: 10,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  emptyText: {
-    fontSize: 16,
-    color: theme.COLORS.gray1,
-    textAlign: 'center',
-    ...theme.FONTS.Mulish_400Regular,
   },
   searchContainer: {
     flexDirection: 'row',

@@ -1,14 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Helper function to calculate total
-const calculateTotal = (cartItems) => {
-  return cartItems.reduce((sum, item) => {
-    return sum + item.volume.reduce((volumeSum, v) => {
-      return volumeSum + (v.price * v.quantity);
-    }, 0);
-  }, 0);
-};
-
 const initialState = {
   loading: false,
   list: [],
@@ -20,8 +11,8 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const { _id, selectedVolume, details, name, images } = action.payload;
-      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume || '750ml';
+      const { _id, selectedVolume, details } = action.payload;
+      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume;
       const volumeToUse = selectedVolume || defaultVolume;
 
       const inCart = state.list.find((item) => item._id === _id);
@@ -43,8 +34,8 @@ const cartSlice = createSlice({
       } else {
         state.list.push({
           _id,
-          name: name || 'Product',
-          images: images || [],
+          name: action.payload.name,
+          images: action.payload.images,
           volume: [
             {
               volume: volumeToUse,
@@ -55,12 +46,19 @@ const cartSlice = createSlice({
         });
       }
 
-      // Recalculate total using helper function
-      state.total = calculateTotal(state.list);
+      // Recalculate total
+      state.total = state.list.reduce((sum, item) => {
+        return (
+          sum +
+          item.volume.reduce((volumeSum, v) => {
+            return volumeSum + v.price * v.quantity;
+          }, 0)
+        );
+      }, 0);
     },
     removeFromCart: (state, action) => {
       const { _id, selectedVolume, details } = action.payload;
-      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume || '750ml';
+      const defaultVolume = details?.volume?.find((v) => v.isDefault)?.volume;
       const volumeToUse = selectedVolume || defaultVolume;
 
       const inCart = state.list.find((item) => item._id === _id);
@@ -79,8 +77,15 @@ const cartSlice = createSlice({
             }
           }
 
-          // Recalculate total using helper function
-          state.total = calculateTotal(state.list);
+          // Recalculate total
+          state.total = state.list.reduce((sum, item) => {
+            return (
+              sum +
+              item.volume.reduce((volumeSum, v) => {
+                return volumeSum + v.price * v.quantity;
+              }, 0)
+            );
+          }, 0);
         }
       }
     },
@@ -89,8 +94,15 @@ const cartSlice = createSlice({
     },
     setCart: (state, action) => {
       state.list = action.payload;
-      // Recalculate total using helper function
-      state.total = calculateTotal(state.list);
+      // Recalculate total when setting cart
+      state.total = state.list.reduce((sum, item) => {
+        return (
+          sum +
+          item.volume.reduce((volumeSum, v) => {
+            return volumeSum + v.price * v.quantity;
+          }, 0)
+        );
+      }, 0);
     },
   },
 });

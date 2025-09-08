@@ -6,7 +6,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Location from 'expo-location';
 import { OpenLocationCode } from 'open-location-code';
 import { useSelector } from 'react-redux';
-import { selectUserAddresses } from '../store/selectors';
 import { components } from '../components';
 import { theme } from '../constants';
 import { svg } from '../svg';
@@ -17,7 +16,9 @@ const MyAddress = () => {
     return <components.Header title="My address" goBack={true} height={42} />;
   };
 
-  const addresses = useSelector(selectUserAddresses);
+  const {
+    user: { addresses },
+  } = useSelector((state) => state.user);
 
   const [geocodedAddresses, setGeocodedAddresses] = useState({});
 

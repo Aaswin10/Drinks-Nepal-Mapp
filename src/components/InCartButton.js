@@ -7,10 +7,10 @@ import { addToCart } from '../store/cartSlice';
 
 const InCartButton = ({ item }) => {
   const productList = useSelector((state) => state.cart.list);
-  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault)?.volume || '750ml';
+  const defaultVolume = item?.details?.volume?.find((v) => v.isDefault)?.volume;
 
   const productExist = (item) => {
-    const inCart = productList.find((i) => i._id === item._id || i.id === item.id);
+    const inCart = productList.find((i) => i._id === item._id);
     if (!inCart) return false;
     return inCart.volume.some((v) => v.volume === defaultVolume);
   };

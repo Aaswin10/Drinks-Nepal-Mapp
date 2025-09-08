@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Alert, ImageBackground, ScrollView, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Alert, ImageBackground, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../store/cartSlice';
 import { setScreen } from '../store/tabSlice';
-import { useResponsiveDimensions } from '../hooks/useResponsiveDimensions';
-import { selectCartItems, selectCartTotal } from '../store/selectors';
 
 import { components } from '../components';
 import { theme } from '../constants';
@@ -13,19 +11,33 @@ import { svg } from '../svg';
 
 const Order = () => {
   const navigation = useNavigation();
-  const { getScaledSize } = useResponsiveDimensions();
-  const products = useSelector(selectCartItems);
-  const total = useSelector(selectCartTotal)?.toFixed(2);
+  const products = useSelector((state) => state.cart.list);
+  const total = useSelector((state) => state.cart.total)?.toFixed(2);
 
   const dispatch = useDispatch();
-  const styles = React.useMemo(() => createStyles(getScaledSize), [getScaledSize]);
 
   const renderHeader = () => {
     return (
       <>
-        <components.ResponsiveHeader title="Cart" />
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerTitle}>
+        <components.Header title="Cart" goBack={products.length > 0 ? false : false} />
+        <View
+          style={{
+            left: 0,
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            width: '100%',
+            backgroundColor: theme.COLORS.white,
+          }}
+          className="px-5 py-5"
+        >
+          <Text
+            style={{
+              ...theme.FONTS.Mulish_700Bold,
+              color: theme.COLORS.black,
+              fontSize: 22,
+            }}
+          >
             My Cart
           </Text>
         </View>
@@ -119,7 +131,6 @@ const Order = () => {
                               dispatch(
                                 removeFromCart({
                                   ...cartItem,
-                                  details: { volume: cartItem.volume },
                                   selectedVolume: volumeItem.volume,
                                 }),
                               )
@@ -150,7 +161,6 @@ const Order = () => {
                               dispatch(
                                 addToCart({
                                   ...cartItem,
-                                  details: { volume: cartItem.volume },
                                   selectedVolume: volumeItem.volume,
                                 }),
                               )
@@ -320,83 +330,63 @@ const Order = () => {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.emptyCartContainer}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingVertical: theme.SIZES.height * 0.05,
+        }}
       >
-        <View style={styles.emptyIconContainer}>
+        <View
+          style={{
+            alignItems: 'center',
+            marginBottom: 20,
+          }}
+        >
           <svg.ShoppingBagSvg />
         </View>
-        <components.Line containerStyle={styles.lineStyle} />
-        <Text style={styles.emptyTitle}>
+        <components.Line containerStyle={{ marginBottom: 14 }} />
+        <Text
+          style={{
+            textAlign: 'center',
+            ...theme.FONTS.H2,
+            color: theme.COLORS.black,
+            paddingHorizontal: 60,
+            marginBottom: 14,
+          }}
+        >
           Your cart is empty!
         </Text>
-        <Text style={styles.emptySubtitle}>
+        <Text
+          style={{
+            textAlign: 'center',
+            ...theme.FONTS.Mulish_400Regular,
+            fontSize: 16,
+            color: theme.COLORS.gray1,
+            lineHeight: 16 * 1.7,
+            paddingHorizontal: 50,
+            marginBottom: 30,
+          }}
+        >
           Looks like you haven&apos;t added any drinks to your cart yet.
         </Text>
         <components.Button
           title="Browse our selection"
           onPress={() => navigation.navigate('MainLayout', dispatch(setScreen('Home')))}
-          containerStyle={styles.browseButton}
         />
       </ScrollView>
     );
   };
 
   return (
-    <View style={[styles.container, { 
-      backgroundColor: products.length === 0 ? theme.COLORS.white : theme.COLORS.lightBlue2 
-    }]}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: products.length === 0 ? theme.COLORS.white : theme.COLORS.lightBlue2,
+      }}
+    >
       {renderHeader()}
       {products.length === 0 ? renderCartIsEmpty() : renderContent()}
     </View>
   );
 };
-
-const createStyles = (getScaledSize) => StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerContainer: {
-    paddingHorizontal: getScaledSize(20),
-    paddingVertical: getScaledSize(20),
-    backgroundColor: theme.COLORS.white,
-  },
-  headerTitle: {
-    ...theme.FONTS.Mulish_700Bold,
-    color: theme.COLORS.black,
-    fontSize: getScaledSize(22),
-  },
-  emptyCartContainer: {
-    paddingHorizontal: getScaledSize(20),
-    paddingVertical: getScaledSize(40),
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
-  emptyIconContainer: {
-    alignItems: 'center',
-    marginBottom: getScaledSize(20),
-  },
-  lineStyle: {
-    marginBottom: getScaledSize(14),
-  },
-  emptyTitle: {
-    textAlign: 'center',
-    ...theme.FONTS.H2,
-    color: theme.COLORS.black,
-    paddingHorizontal: getScaledSize(40),
-    marginBottom: getScaledSize(14),
-  },
-  emptySubtitle: {
-    textAlign: 'center',
-    ...theme.FONTS.Mulish_400Regular,
-    fontSize: getScaledSize(16),
-    color: theme.COLORS.gray1,
-    lineHeight: getScaledSize(24),
-    paddingHorizontal: getScaledSize(30),
-    marginBottom: getScaledSize(30),
-  },
-  browseButton: {
-    marginTop: getScaledSize(20),
-  },
-});
 
 export default Order;

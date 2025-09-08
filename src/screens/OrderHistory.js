@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useOrdersForUser } from '../../queries/order';
-import { selectUser } from '../store/selectors';
 import { theme } from '../constants';
 import { setLoading } from '../store/cartSlice';
 import { svg } from '../svg';
@@ -14,8 +13,9 @@ const OrderHistory = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUser);
-  const userId = user?._id;
+  const {
+    user: { _id: userId },
+  } = useSelector((state) => state.user);
 
   const { data, isLoading, refetch } = useOrdersForUser({ userId });
   const [orderHistory, setOrderHistory] = React.useState([]);

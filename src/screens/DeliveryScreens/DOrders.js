@@ -154,11 +154,6 @@ const DOrders = () => {
 
   const setupLocationTracking = async () => {
     try {
-      if (!user?._id) {
-        console.warn('No delivery guy ID available');
-        return;
-      }
-      
       // Request foreground permissions
       const { status: foregroundStatus } = await Location.requestForegroundPermissionsAsync();
       if (foregroundStatus !== 'granted') {

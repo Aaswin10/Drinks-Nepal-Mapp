@@ -77,11 +77,6 @@ const VerifyYourPhoneNumber = ({ route }) => {
   }, [isPending]);
 
   const handleContinue = async () => {
-    if (!phoneNumber || phoneNumber.length < 10) {
-      Alert.alert('Error', 'Please enter a valid phone number');
-      return;
-    }
-
     try {
       generateOtpMutation(
         { phoneNumber },
@@ -90,19 +85,17 @@ const VerifyYourPhoneNumber = ({ route }) => {
             if (data.data === true) {
               navigation.navigate('ConfirmationCode', { phoneNumber });
             } else {
-              Alert.alert('Error', 'Failed to send OTP. Please try again.');
+              Alert.alert('Error', 'Error generating OTP');
             }
           },
           onError: (error) => {
             console.log('Error generating OTP:', JSON.stringify(error));
-            const errorMessage = error?.response?.data?.message || 'Failed to send OTP. Please check your phone number and try again.';
-            Alert.alert('Error', errorMessage);
+            Alert.alert('Error', 'Error generating OTP');
           },
         },
       );
     } catch (error) {
       console.error('Error in handleContinue:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
       dispatch(setLoading(false));
     }
   };
@@ -136,12 +129,7 @@ const VerifyYourPhoneNumber = ({ route }) => {
             containerStyle={styles.inputField}
             keyboardType={'numeric'}
             value={phoneNumber}
-            onChangeText={(text) => {
-              setPhoneNumber(text);
-              if (phoneError) setPhoneError('');
-            }}
-            error={phoneError}
-            required={true}
+            onChangeText={setPhoneNumber}
           />
         </View>
       </ScrollView>

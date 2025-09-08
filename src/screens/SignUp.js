@@ -24,23 +24,6 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
 
   const handleContinue = async () => {
-    if (!fullName.trim()) {
-      Alert.alert('Error', 'Please enter your full name');
-      return;
-    }
-
-    if (!email.trim()) {
-      Alert.alert('Error', 'Please enter your email address');
-      return;
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'Please enter a valid email address');
-      return;
-    }
-
     try {
       dispatch(setLoading(true));
       registerMutation(
@@ -59,20 +42,17 @@ const SignUp = () => {
               navigation.navigate('AccountCreated', { phoneNumber });
             } else {
               Alert.alert('Error', 'Error Registering');
-              dispatch(setLoading(false));
             }
           },
           onError: (error) => {
             console.log('Error Registering:', JSON.stringify(error));
-            const errorMessage = error?.response?.data?.message || 'Registration failed. Please try again.';
-            Alert.alert('Error', errorMessage);
+            Alert.alert('Error', 'Error Registering');
             dispatch(setLoading(false));
           },
         },
       );
     } catch (error) {
       console.error('Error in handleContinue:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
       dispatch(setLoading(false));
     }
   };
@@ -109,12 +89,7 @@ const SignUp = () => {
           containerStyle={{ marginBottom: 20 }}
           check={true}
           value={fullName}
-          onChangeText={(text) => {
-            setFullName(text);
-            if (nameError) setNameError('');
-          }}
-          error={nameError}
-          required={true}
+          onChangeText={setFullName}
         />
         <components.InputField
           title="Email"
@@ -122,12 +97,7 @@ const SignUp = () => {
           containerStyle={{ marginBottom: 20 }}
           check={true}
           value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-            if (emailError) setEmailError('');
-          }}
-          error={emailError}
-          required={true}
+          onChangeText={setEmail}
         />
         <components.Button
           title="Continue"

@@ -3,15 +3,13 @@ import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNotifications } from '../../queries/authentication/authentication';
-import { selectUser } from '../store/selectors';
 import { components } from '../components';
 import { theme } from '../constants';
 import { setLoading } from '../store/cartSlice';
 import { resetUserNotificationUnReadCount } from '../store/userSlice';
 
 const NotificationScreen = () => {
-  const user = useSelector(selectUser);
-  const userId = user?._id;
+  const userId = useSelector((state) => state?.user?.user?._id);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(resetUserNotificationUnReadCount());
